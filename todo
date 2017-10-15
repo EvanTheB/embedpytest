@@ -1,3 +1,8 @@
 call python from c
 call python to modify some c stuff, from c
 make python run a console, which modifies the c stuff, from c
+
+Qs:
+    Is pypy better?
+    Is cffi better?
+    What about sandboxing?
