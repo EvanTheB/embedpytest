@@ -6,3 +6,13 @@ Qs:
     Is pypy better?
     Is cffi better?
     What about sandboxing?
+
+repl:
+    https://docs.python.org/3/library/code.html
+    https://ipython.org/
+    http://www.dreampie.org/
+    https://www.bpython-interpreter.org/
+
+Guides:
+    https://morepypy.blogspot.com.au/2016/01/using-cffi-for-embedding.html
+    http://cffi.readthedocs.io/en/latest/cdef.html
