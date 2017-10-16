@@ -1,4 +1,7 @@
+import sys
 import cffi
+
+cfile_name = sys.argv[1]
 
 ffibuilder = cffi.FFI()
 
@@ -18,7 +21,7 @@ ffibuilder.cdef("""
 # verbatim copied to the output c
 # need both this and cdef
 # without this the c file wont compile (cdef wrappers refer to undeclared objects)
-ffibuilder.set_source("test1_gen", """
+ffibuilder.set_source("{}".format(cfile_name), """
     extern int value;
     void print_value(void);
 """)
@@ -26,12 +29,12 @@ ffibuilder.set_source("test1_gen", """
 # init time once only code, called on first api function call
 # the cdef and set_source stuff is in lib
 ffibuilder.embedding_init_code("""
-    from test1_gen import ffi, lib
+    from {} import ffi, lib
     import code
 
     @ffi.def_extern()
     def repl():
         code.InteractiveConsole(locals=globals()).interact()
-""")
+""".format(cfile_name))
 
 ffibuilder.compile(verbose=True)

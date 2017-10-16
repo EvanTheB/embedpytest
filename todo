@@ -16,3 +16,4 @@ repl:
 Guides:
     https://morepypy.blogspot.com.au/2016/01/using-cffi-for-embedding.html
     http://cffi.readthedocs.io/en/latest/cdef.html
+    http://doc.pypy.org/en/latest/embedding.html
