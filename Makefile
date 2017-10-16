@@ -3,3 +3,7 @@ main: test1.c test1_gen.c
 
 test1_gen.c: test1.py
 	python test1.py
+
+.PHONY: clean
+clean:
+	-rm *_gen.c *_gen.o *_gen.so main*
