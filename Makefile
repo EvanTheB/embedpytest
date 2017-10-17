@@ -9,6 +9,9 @@ main2: test1.c test1_2_gen.c
 main3: test1.c test1_3_gen.c
 	gcc -o $@ $^ -I/usr/include/python3.5/ -lpython3.5m -pthread
 
+main_bpython: test_bpython.c test_bpython_gen.c
+	gcc -o $@ $^ -I/usr/include/python2.7/ -lpython2.7 -pthread
+
 test1_pypy_gen.c: test1.py
 	./pypy2-v5.9.0-linux64/bin/pypy test1.py test1_pypy_gen
 
@@ -17,6 +20,9 @@ test1_2_gen.c: test1.py
 
 test1_3_gen.c: test1.py
 	python3 test1.py test1_3_gen
+
+test_bpython_gen.c: test_bpython.py
+	python test_bpython.py test_bpython_gen
 
 .PHONY: clean
 clean:
