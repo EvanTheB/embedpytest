@@ -7,7 +7,8 @@ ffibuilder = cffi.FFI()
 
 # the API exported by the python code
 ffibuilder.embedding_api("""
-    void repl(void);
+    void py_tick(void);
+    void py_init(void);
 """)
 
 # declare things that the python code wants to use
@@ -30,11 +31,20 @@ ffibuilder.set_source("{}".format(cfile_name), """
 # the cdef and set_source stuff is in lib
 ffibuilder.embedding_init_code("""
     from {} import ffi, lib
-    from bpython.curtsies import main
+    import threading
+    import code
+
+    def repl():
+        code.InteractiveConsole(locals=globals()).interact()
 
     @ffi.def_extern()
-    def repl():
-        main(args = [], locals_=globals())
+    def py_init():
+        threading.Thread(target=repl).start()
+
+    @ffi.def_extern()
+    def py_tick():
+        pass
+
 """.format(cfile_name))
 
 ffibuilder.compile(verbose=True)
