@@ -1,3 +1,7 @@
+/* The python repl runs in its own thread. C code 'owns' stdout and stdin.
+    python manages starting and communicating with the thread.
+ */
+
 #include "stdio.h"
 #include "unistd.h"
 #include <sys/select.h>
