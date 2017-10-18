@@ -7,7 +7,7 @@ ffibuilder = cffi.FFI()
 
 # the API exported by the python code
 ffibuilder.embedding_api("""
-    void py_tick(void);
+    void py_tick(const char *line);
     void py_init(void);
 """)
 
@@ -32,18 +32,23 @@ ffibuilder.set_source("{}".format(cfile_name), """
 ffibuilder.embedding_init_code("""
     from {} import ffi, lib
     import threading
+    import Queue
     import code
 
+    q = Queue.Queue()
     def repl():
-        code.InteractiveConsole(locals=globals()).interact()
+        r = code.InteractiveConsole(locals=globals())
+        while True:
+            line = q.get(True)
+            r.push(line)
 
     @ffi.def_extern()
     def py_init():
         threading.Thread(target=repl).start()
 
     @ffi.def_extern()
-    def py_tick():
-        pass
+    def py_tick(line):
+        q.put(ffi.string(line))
 
 """.format(cfile_name))
 
