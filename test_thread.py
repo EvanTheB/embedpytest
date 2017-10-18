@@ -8,6 +8,7 @@ ffibuilder = cffi.FFI()
 # the API exported by the python code
 ffibuilder.embedding_api("""
     void py_tick(const char *line);
+    const char *py_get_output(void);
     void py_init(void);
 """)
 
@@ -36,6 +37,11 @@ ffibuilder.embedding_init_code("""
     import code
 
     q = Queue.Queue()
+
+    import sys
+    sys.stdout = Queue.Queue()
+    sys.stdout.write = sys.stdout.put
+
     def repl():
         r = code.InteractiveConsole(locals=globals())
         while True:
@@ -49,6 +55,12 @@ ffibuilder.embedding_init_code("""
     @ffi.def_extern()
     def py_tick(line):
         q.put(ffi.string(line))
+
+    @ffi.def_extern()
+    def py_get_output():
+        if not sys.stdout.empty():
+            return ffi.new('char[]', sys.stdout.get())
+        return ffi.NULL
 
 """.format(cfile_name))
 

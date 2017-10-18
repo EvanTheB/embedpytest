@@ -4,6 +4,7 @@
 #include <sys/time.h>
 
 extern void py_tick(const char *line);
+extern const char *py_get_output(void);
 extern void py_init(void);
 
 int value = 0;
@@ -30,6 +31,11 @@ int main(void)
             int cnt = read(0, buffer, 1023);
             buffer[cnt] = '\0';
             py_tick(buffer);
+        }
+        const char *py_out;
+        while (py_out = py_get_output())
+        {
+            printf("%s\n", py_out);
         }
 
         print_value();
